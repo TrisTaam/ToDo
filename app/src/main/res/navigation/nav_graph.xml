@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.tristaam.todo.ui.HomeFragment"
+        android:label="@string/task"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.tristaam.todo.ui.NotificationFragment"
+        android:label="@string/notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.tristaam.todo.ui.SettingFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

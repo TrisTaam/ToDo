@@ -4,11 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HomeFragment">
+    tools:context=".ui.home.HomeFragment">
 
-    <com.google.android.material.search.SearchBar
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAllTasks"
         android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddTask"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/ic_plus"
+        app:fabCustomSize="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

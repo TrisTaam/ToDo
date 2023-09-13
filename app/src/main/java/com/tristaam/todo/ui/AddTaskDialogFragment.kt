@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tristaam.todo.databinding.FragmentAddTaskDialogBinding
+import com.tristaam.todo.model.Priority
 import com.tristaam.todo.model.Task
 
 class AddTaskDialogFragment(private val listener: IAddTaskListener) : BottomSheetDialogFragment() {
@@ -22,12 +23,31 @@ class AddTaskDialogFragment(private val listener: IAddTaskListener) : BottomShee
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnCreateTask.setOnClickListener { onCreateTaskClick() }
+        binding.apply {
+            btnMedium.isChecked = true
+            btnDueDate.setOnClickListener { }
+            btnCreateTask.setOnClickListener { onCreateTaskClick() }
+        }
+    }
+
+    private fun onDueDateClick() {
+
     }
 
     private fun onCreateTaskClick() {
         binding.apply {
-            listener.addTask(Task(etTaskName.text.toString(), etTaskDescription.text.toString()))
+            val priority = when {
+                btnHigh.isChecked -> Priority.HIGH
+                btnMedium.isChecked -> Priority.MEDIUM
+                else -> Priority.LOW
+            }
+            listener.addTask(
+                Task(
+                    etTaskName.text.toString(),
+                    etTaskDescription.text.toString(),
+                    priority
+                )
+            )
         }
         dismiss()
     }

@@ -21,11 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initComponents() {
         navController = findNavController(R.id.nav_host_fragment_container)
-        val appBarConfiguration = AppBarConfiguration.Builder(navController.graph)
-            .build()
         binding.apply {
             bottomNavigationView.setupWithNavController(navController)
-            toolbar.setupWithNavController(navController, appBarConfiguration)
         }
     }
 }

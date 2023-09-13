@@ -1,18 +1,20 @@
 package com.tristaam.todo.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tristaam.todo.R
 import com.tristaam.todo.adapter.TaskAdapter
 import com.tristaam.todo.databinding.FragmentHomeBinding
 import com.tristaam.todo.model.Task
 import com.tristaam.todo.ui.AddTaskDialogFragment
 import com.tristaam.todo.ui.IAddTaskListener
+import com.tristaam.todo.ui.ITaskListener
 import com.tristaam.todo.viewmodel.TaskViewModel
 
 class HomeFragment : Fragment() {
@@ -32,7 +34,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val taskAdapter = TaskAdapter()
+        val taskAdapter = TaskAdapter(object : ITaskListener {
+            override fun detailTask(task: Task) {
+                val bundle = Bundle()
+                bundle.putParcelable("task", task)
+                findNavController().navigate(R.id.taskDetailFragment, bundle)
+            }
+        })
         binding.apply {
             rvAllTasks.layoutManager = LinearLayoutManager(context)
             rvAllTasks.adapter = taskAdapter

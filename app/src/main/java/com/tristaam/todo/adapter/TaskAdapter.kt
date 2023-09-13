@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.tristaam.todo.databinding.HolderAllTasksBinding
 import com.tristaam.todo.model.Task
+import com.tristaam.todo.ui.ITaskListener
 
-class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(private val listener: ITaskListener) :
+    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     private var tasks: MutableList<Task> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -33,7 +35,8 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
         fun bind(task: Task) {
             binding.apply {
                 tvTaskName.text = task.name
-                tvTaskDescription.text = task.description
+                tvTaskPriority.text = task.priority.priorityName
+                cardTask.setOnClickListener { listener.detailTask(task) }
             }
         }
     }

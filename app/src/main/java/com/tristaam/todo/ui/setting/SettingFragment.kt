@@ -1,21 +1,21 @@
-package com.tristaam.todo.ui
+package com.tristaam.todo.ui.setting
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.tristaam.todo.databinding.FragmentNotificationBinding
+import com.tristaam.todo.databinding.FragmentSettingBinding
 
-class NotificationFragment : Fragment() {
-    private var _binding: FragmentNotificationBinding? = null
+class SettingFragment : Fragment() {
+    private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNotificationBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingBinding.inflate(inflater, container, false)
         return binding.root
     }
 

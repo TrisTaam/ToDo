@@ -12,16 +12,21 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.tristaam.todo.ui.NotificationFragment"
+        android:name="com.tristaam.todo.ui.notification.NotificationFragment"
         android:label="@string/notification"
         tools:layout="@layout/fragment_notification" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.tristaam.todo.ui.SettingFragment"
+        android:name="com.tristaam.todo.ui.setting.SettingFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_setting" />
     <dialog
         android:id="@+id/addTaskDialogFragment"
         android:name="com.tristaam.todo.ui.AddTaskDialogFragment"
         android:label="AddTaskDialogFragment" />
+    <fragment
+        android:id="@+id/taskDetailFragment"
+        android:name="com.tristaam.todo.ui.taskdetail.TaskDetailFragment"
+        android:label="fragment_task_detail"
+        tools:layout="@layout/fragment_task_detail" />
 </navigation>

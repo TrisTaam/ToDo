@@ -11,7 +11,11 @@ import com.tristaam.todo.room.task.TaskRepository
 import kotlinx.coroutines.launch
 
 class TaskViewModel(context: Context) : ViewModel() {
-    private val taskRepository = TaskRepository(context)
+    private val taskRepository: TaskRepository
+
+    init {
+        taskRepository = TaskRepository(context)
+    }
 
     fun insertTask(task: Task) = viewModelScope.launch {
         taskRepository.insertTask(task)

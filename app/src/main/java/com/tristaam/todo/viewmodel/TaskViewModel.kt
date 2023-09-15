@@ -1,13 +1,12 @@
 package com.tristaam.todo.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.tristaam.todo.model.Task
-import com.tristaam.todo.room.task.TaskRepository
+import com.tristaam.todo.database.task.TaskRepository
 import kotlinx.coroutines.launch
 
 class TaskViewModel(context: Context) : ViewModel() {

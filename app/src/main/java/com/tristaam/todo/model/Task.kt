@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "task_table")
 data class Task(
-    var name: String,
+    var title: String,
     var description: String,
     var priority: Priority
 ) : Parcelable {
@@ -23,7 +23,7 @@ data class Task(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
+        parcel.writeString(title)
         parcel.writeString(description)
         parcel.writeInt(id)
     }
@@ -41,10 +41,4 @@ data class Task(
             return arrayOfNulls(size)
         }
     }
-}
-
-enum class Priority(val priorityName: String) {
-    HIGH("High"),
-    MEDIUM("Medium"),
-    LOW("Low")
 }

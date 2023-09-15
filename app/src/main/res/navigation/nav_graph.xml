@@ -3,27 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/boardFragment">
+
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.tristaam.todo.ui.home.HomeFragment"
-        android:label="@string/task"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/boardFragment"
+        android:name="com.tristaam.todo.ui.board.BoardFragment"
+        android:label="fragment_board"
+        tools:layout="@layout/fragment_board" />
     <fragment
-        android:id="@+id/notificationFragment"
-        android:name="com.tristaam.todo.ui.notification.NotificationFragment"
-        android:label="@string/notification"
-        tools:layout="@layout/fragment_notification" />
+        android:id="@+id/unplannedFragment"
+        android:name="com.tristaam.todo.ui.unplanned.UnplannedFragment"
+        android:label="fragment_unplanned"
+        tools:layout="@layout/fragment_unplanned" />
     <fragment
-        android:id="@+id/settingFragment"
-        android:name="com.tristaam.todo.ui.setting.SettingFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_setting" />
-    <dialog
-        android:id="@+id/addTaskDialogFragment"
-        android:name="com.tristaam.todo.ui.AddTaskDialogFragment"
-        android:label="AddTaskDialogFragment" />
+        android:id="@+id/timeLineFragment"
+        android:name="com.tristaam.todo.ui.timeline.TimelineFragment"
+        android:label="fragment_time_line"
+        tools:layout="@layout/fragment_timeline" />
+    <fragment
+        android:id="@+id/workspaceFragment"
+        android:name="com.tristaam.todo.ui.workspace.WorkspaceFragment"
+        android:label="fragment_workspace"
+        tools:layout="@layout/fragment_workspace" />
+    <fragment
+        android:id="@+id/createTaskFragment"
+        android:name="com.tristaam.todo.ui.createTask.CreateTaskFragment"
+        android:label="fragment_create_task"
+        tools:layout="@layout/fragment_create_task" />
     <fragment
         android:id="@+id/taskDetailFragment"
         android:name="com.tristaam.todo.ui.taskdetail.TaskDetailFragment"

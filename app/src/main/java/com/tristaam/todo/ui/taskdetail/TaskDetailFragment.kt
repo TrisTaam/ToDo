@@ -1,15 +1,16 @@
 package com.tristaam.todo.ui.taskdetail
 
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.tristaam.todo.MainActivity
+import com.tristaam.todo.R
 import com.tristaam.todo.databinding.FragmentTaskDetailBinding
-import com.tristaam.todo.model.Priority
 import com.tristaam.todo.model.Task
 import com.tristaam.todo.viewmodel.TaskViewModel
 
@@ -17,7 +18,7 @@ class TaskDetailFragment : Fragment() {
     private var _binding: FragmentTaskDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TaskViewModel by viewModels {
-        TaskViewModel.TaskViewModelFactory(requireActivity().application)
+        TaskViewModel.TaskViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -30,34 +31,21 @@ class TaskDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val task = arguments?.getParcelable<Task>("task")
+        (activity as MainActivity).binding.bottomNavigationView.visibility = View.GONE
+        val task = arguments?.getParcelable<Task>(getString(R.string.task_detail))
+        Log.d("TaskDetailFragment", "onViewCreated: $task")
         binding.apply {
-            toolbar.setNavigationOnClickListener { onBack() }
-            etTaskDetailName.setText(task?.name)
-            etTaskDetailDescription.setText(task?.description)
-            when (task?.priority) {
-                Priority.HIGH -> btnDetailHigh.isChecked = true
-                Priority.MEDIUM -> btnDetailMedium.isChecked = true
-                else -> btnDetailLow.isChecked = true
-            }
-            btnDetailSave.setOnClickListener { task?.let { it1 -> onSaveClick(it1) } }
-            btnDetailDelete.setOnClickListener { task?.let { it1 -> onDeleteClick(it1) } }
+            etTaskTitle.setText(task?.title)
+            etDescription.setText(task?.description)
+            btnSaveTask.setOnClickListener { task?.let { it1 -> onSaveClick(it1) } }
+            btnDeleteTask.setOnClickListener { task?.let { it1 -> onDeleteClick(it1) } }
         }
-    }
-
-    private fun onBack() {
-        findNavController().popBackStack()
     }
 
     private fun onSaveClick(task: Task) {
         binding.apply {
-            task.name = etTaskDetailName.text.toString()
-            task.description = etTaskDetailDescription.text.toString()
-            task.priority = when {
-                btnDetailHigh.isChecked -> Priority.HIGH
-                btnDetailMedium.isChecked -> Priority.MEDIUM
-                else -> Priority.LOW
-            }
+            task.title = etTaskTitle.text.toString()
+            task.description = etDescription.text.toString()
         }
         viewModel.updateTask(task)
         findNavController().popBackStack()
@@ -70,6 +58,7 @@ class TaskDetailFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        (activity as MainActivity).binding.bottomNavigationView.visibility = View.VISIBLE
         _binding = null
     }
 }

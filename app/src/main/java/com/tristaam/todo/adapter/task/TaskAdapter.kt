@@ -1,13 +1,17 @@
-package com.tristaam.todo.database.adapter.task
+package com.tristaam.todo.adapter.task
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.tristaam.todo.R
 import com.tristaam.todo.databinding.HolderTaskBinding
+import com.tristaam.todo.model.Priority
 import com.tristaam.todo.model.Task
+import com.tristaam.todo.utils.DateTimeUtils
 
-class TaskAdapter(private val listener: ITaskListener) :
+class TaskAdapter(private val listener: ITaskListener, private val context: Context) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     private val tasks = mutableListOf<Task>()
 
@@ -17,6 +21,13 @@ class TaskAdapter(private val listener: ITaskListener) :
             binding.apply {
                 tvTaskTitle.text = task.title
                 tvDescription.text = task.description
+                tvDueDate.text = DateTimeUtils.dateFormat.format(task.dueDate)
+                when (task.priority) {
+                    Priority.URGENT -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_red))
+                    Priority.HIGH -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_orange))
+                    Priority.MEDIUM -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_yellow))
+                    Priority.LOW -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_green))
+                }
                 clTask.setOnClickListener { listener.onTaskClicked(task) }
             }
         }

@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/boardFragment"
-        android:icon="@drawable/ic_board"
+        android:icon="@drawable/selector_board"
         android:title="@string/board" />
 
     <item
         android:id="@+id/unplannedFragment"
-        android:icon="@drawable/ic_unplanned"
+        android:icon="@drawable/selector_unplanned"
         android:title="@string/unplanned" />
 
     <item
         android:id="@+id/timeLineFragment"
-        android:icon="@drawable/ic_timeline"
+        android:icon="@drawable/selector_timeline"
         android:title="@string/timeline" />
 
     <item
         android:id="@+id/workspaceFragment"
-        android:icon="@drawable/ic_workspace"
+        android:icon="@drawable/selector_workspace"
         android:title="@string/workspace" />
 </menu>

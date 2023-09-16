@@ -17,4 +17,7 @@
     <string name="assign_tags">Assign tags</string>
     <string name="add_task">Add task</string>
     <string name="task_detail">Task detail</string>
+    <string name="time_format">%02d:%02d</string>
+    <string name="create_project">Create project</string>
+    <string name="project_name">Project name</string>
 </resources>

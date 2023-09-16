@@ -1,4 +1,4 @@
-package com.tristaam.todo.database.adapter.task
+package com.tristaam.todo.adapter.task
 
 import com.tristaam.todo.model.Task
 

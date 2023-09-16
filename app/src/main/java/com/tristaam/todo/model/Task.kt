@@ -4,11 +4,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "task_table")
 data class Task(
     var title: String,
     var description: String,
+    var dueDate: Date,
     var priority: Priority
 ) : Parcelable {
     @PrimaryKey(autoGenerate = true)
@@ -17,8 +19,8 @@ data class Task(
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readInt().let { Priority.values()[it] }
-    ) {
+        Date(parcel.readInt().toLong()),
+        parcel.readInt().let { Priority.values()[it] }) {
         id = parcel.readInt()
     }
 

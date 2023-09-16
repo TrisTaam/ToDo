@@ -38,7 +38,7 @@
         <ImageView
             android:id="@+id/ivBoard"
             style="@style/iconSize"
-            android:src="@drawable/ic_board"
+            android:src="@drawable/ic_board_active"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -129,7 +129,7 @@
         <ImageView
             android:id="@+id/ivPriority"
             style="@style/iconSize"
-            android:src="@drawable/ic_flag"
+            android:src="@drawable/ic_flag_black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

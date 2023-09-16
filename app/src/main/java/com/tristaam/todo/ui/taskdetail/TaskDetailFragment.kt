@@ -8,10 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.tristaam.todo.MainActivity
 import com.tristaam.todo.R
 import com.tristaam.todo.databinding.FragmentTaskDetailBinding
 import com.tristaam.todo.model.Task
+import com.tristaam.todo.utils.DateTimeUtils
 import com.tristaam.todo.viewmodel.TaskViewModel
 
 class TaskDetailFragment : Fragment() {
@@ -37,15 +41,42 @@ class TaskDetailFragment : Fragment() {
         binding.apply {
             etTaskTitle.setText(task?.title)
             etDescription.setText(task?.description)
+            chipDate.text = task?.dueDate?.let { DateTimeUtils.dateFormat.format(it) }
+            chipTime.text = task?.dueDate?.let { DateTimeUtils.timeFormat.format(it) }
+            chipDate.setOnClickListener { onChipDateClick() }
+            chipTime.setOnClickListener { onChipTimeClick() }
             btnSaveTask.setOnClickListener { task?.let { it1 -> onSaveClick(it1) } }
             btnDeleteTask.setOnClickListener { task?.let { it1 -> onDeleteClick(it1) } }
         }
+    }
+
+    private fun onChipDateClick() {
+        val materialDatePicker = MaterialDatePicker.Builder.datePicker()
+            .build()
+        materialDatePicker.addOnPositiveButtonClickListener {
+            binding.chipDate.text = materialDatePicker.headerText
+        }
+        materialDatePicker.show(childFragmentManager, "Date picker")
+    }
+
+    private fun onChipTimeClick() {
+        val materialTimePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .build()
+        materialTimePicker.addOnPositiveButtonClickListener {
+            binding.chipTime.text =
+                getString(R.string.time_format, materialTimePicker.hour, materialTimePicker.minute)
+        }
+        materialTimePicker.show(childFragmentManager, "Time picker")
     }
 
     private fun onSaveClick(task: Task) {
         binding.apply {
             task.title = etTaskTitle.text.toString()
             task.description = etDescription.text.toString()
+            task.dueDate = DateTimeUtils.inputFormat.parse(
+                "${chipDate.text} ${chipTime.text}"
+            )!!
         }
         viewModel.updateTask(task)
         findNavController().popBackStack()

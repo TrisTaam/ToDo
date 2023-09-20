@@ -38,6 +38,7 @@ class CreateTaskFragment : Fragment() {
         SubtaskAdapter(object : ISubtaskListener {
             override fun onTick(subtask: Subtask, isChecked: Boolean) {
                 subtask.status = isChecked
+                // Conflict with subtaskAdapter.setData()
                 viewModel.updateSubtask(subtask)
             }
 

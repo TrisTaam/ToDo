@@ -1,17 +1,20 @@
-package com.tristaam.todo.ui.dialog
+package com.tristaam.todo.ui.dialog.createProject
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tristaam.todo.databinding.FragmentCreateProjectDialogBinding
 import com.tristaam.todo.model.Project
 
-class CreateProjectDialogFragment(private val listener: ICreateProjectListener) :
-    BottomSheetDialogFragment() {
+class CreateProjectDialogFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentCreateProjectDialogBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: CreateProjectViewModel by viewModels {
+        CreateProjectViewModel.CreateProjectViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +33,7 @@ class CreateProjectDialogFragment(private val listener: ICreateProjectListener) 
 
     private fun onBtnCreateProjectClick() {
         binding.apply {
-            listener.onCreateProject(Project(etProjectName.text.toString()))
+            viewModel.insertProject(Project(etProjectName.text.toString()))
         }
         dismiss()
     }

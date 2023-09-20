@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.tristaam.todo.databinding.HolderProjectBinding
 import com.tristaam.todo.model.Project
-import com.tristaam.todo.model.Task
 
-class ProjectAdapter(private val context: Context) :
+class ProjectAdapter(private val context: Context, private val listener: IProjectListener) :
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
     private val projects = mutableListOf<Project>()
 
@@ -19,6 +18,9 @@ class ProjectAdapter(private val context: Context) :
         fun bind(project: Project) {
             binding.apply {
                 tvProjectName.text = project.name
+                clProject.setOnClickListener {
+                    listener.onProjectClick(project)
+                }
             }
         }
     }

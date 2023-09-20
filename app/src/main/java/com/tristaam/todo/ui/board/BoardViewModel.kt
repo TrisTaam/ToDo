@@ -1,4 +1,4 @@
-package com.tristaam.todo.viewmodel
+package com.tristaam.todo.ui.board
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -6,35 +6,32 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.tristaam.todo.database.project.ProjectRepository
+import com.tristaam.todo.database.task.TaskRepository
 import com.tristaam.todo.model.Project
+import com.tristaam.todo.model.Task
 import kotlinx.coroutines.launch
 
-class ProjectViewModel(context: Context) : ViewModel() {
+class BoardViewModel(context: Context) : ViewModel() {
+    private val taskRepository: TaskRepository
     private val projectRepository: ProjectRepository
 
     init {
+        taskRepository = TaskRepository(context)
         projectRepository = ProjectRepository(context)
     }
 
-    fun insertProject(project: Project) = viewModelScope.launch {
-        projectRepository.insertProject(project)
-    }
-
-    fun updateProject(project: Project) = viewModelScope.launch {
-        projectRepository.updateProject(project)
-    }
-
-    fun deleteProject(project: Project) = viewModelScope.launch {
-        projectRepository.deleteProject(project)
-    }
+    fun getAllTasks(): LiveData<List<Task>> = taskRepository.getAllTasks()
 
     fun getAllProjects(): LiveData<List<Project>> = projectRepository.getAllProjects()
 
-    class ProjectViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    fun getTasksByProjectId(projectId: Int): LiveData<List<Task>> =
+        taskRepository.getTasksByProjectId(projectId)
+
+    class BoardViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(ProjectViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(BoardViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return ProjectViewModel(context) as T
+                return BoardViewModel(context) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

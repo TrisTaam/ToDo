@@ -19,6 +19,9 @@ interface ProjectDao {
     @Delete
     suspend fun deleteProject(project: Project)
 
+    @Query("SELECT * FROM project_table where id = :id")
+    fun getProject(id: Int): LiveData<Project>
+
     @Query("SELECT * FROM project_table")
     fun getAllProjects(): LiveData<List<Project>>
 }

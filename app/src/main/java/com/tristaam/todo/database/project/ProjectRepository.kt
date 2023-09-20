@@ -14,5 +14,6 @@ class ProjectRepository(context: Context) {
     suspend fun insertProject(project: Project) = projectDao.insertProject(project)
     suspend fun updateProject(project: Project) = projectDao.updateProject(project)
     suspend fun deleteProject(project: Project) = projectDao.deleteProject(project)
+    fun getProject(id: Int) = projectDao.getProject(id)
     fun getAllProjects() = projectDao.getAllProjects()
 }

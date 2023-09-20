@@ -6,19 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.board.BoardFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProjects"
+    <HorizontalScrollView
+        android:id="@+id/hsvProjects"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cgProjects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacing="8dp"
+            app:singleLine="true"
+            app:singleSelection="true" />
+
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTasks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvProjects" />
+        app:layout_constraintTop_toBottomOf="@id/hsvProjects" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAdd"

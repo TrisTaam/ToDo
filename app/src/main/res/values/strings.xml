@@ -20,4 +20,16 @@
     <string name="time_format">%02d:%02d</string>
     <string name="create_project">Create project</string>
     <string name="project_name">Project name</string>
+    <string name="select_a_priority">Select a priority</string>
+    <string name="urgent">Urgent</string>
+    <string name="high">High</string>
+    <string name="medium">Medium</string>
+    <string name="low">Low</string>
+    <string name="priority_selected">Priority - %s</string>
+    <string name="all">All</string>
+    <string name="project_detail">Project detail</string>
+    <string name="create_task">Create task</string>
+    <string name="subtask_name">Subtask name</string>
+    <string name="delete">Delete</string>
+    <string name="delete_project_alert">Are you sure you want to delete this project?</string>
 </resources>

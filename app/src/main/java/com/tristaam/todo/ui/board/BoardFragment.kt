@@ -1,28 +1,25 @@
 package com.tristaam.todo.ui.board
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import com.tristaam.todo.R
-import com.tristaam.todo.adapter.project.ProjectAdapter
 import com.tristaam.todo.adapter.task.ITaskListener
 import com.tristaam.todo.adapter.task.TaskAdapter
 import com.tristaam.todo.databinding.FragmentBoardBinding
-import com.tristaam.todo.model.Project
 import com.tristaam.todo.model.Task
-import com.tristaam.todo.ui.createTask.ICreateTaskListener
-import com.tristaam.todo.ui.dialog.CreateProjectDialogFragment
-import com.tristaam.todo.ui.dialog.ICreateProjectListener
-import com.tristaam.todo.viewmodel.ProjectViewModel
-import com.tristaam.todo.viewmodel.TaskViewModel
+import com.tristaam.todo.ui.dialog.createProject.CreateProjectDialogFragment
+import com.tristaam.todo.ui.dialog.projectDetail.ProjectDetailDialogFragment
 
 class BoardFragment : Fragment() {
     private var _binding: FragmentBoardBinding? = null
@@ -39,23 +36,42 @@ class BoardFragment : Fragment() {
             R.anim.rotate_counter_clockwise
         )
     }
-    private val fadeIn: Animation by lazy {
+    private val fadeIn100: Animation by lazy {
         AnimationUtils.loadAnimation(
             context,
-            R.anim.fade_in
+            R.anim.fade_in_100
         )
     }
-    private val fadeOut: Animation by lazy {
+    private val fadeOut100: Animation by lazy {
         AnimationUtils.loadAnimation(
             context,
-            R.anim.fade_out
+            R.anim.fade_out_100
         )
     }
-    private val taskViewModel: TaskViewModel by viewModels {
-        TaskViewModel.TaskViewModelFactory(requireContext())
+    private val fadeIn200: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            context,
+            R.anim.fade_in_200
+        )
     }
-    private val projectViewModel: ProjectViewModel by viewModels {
-        ProjectViewModel.ProjectViewModelFactory(requireContext())
+    private val fadeOut200: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            context,
+            R.anim.fade_out_200
+        )
+    }
+    private val viewModel: BoardViewModel by viewModels {
+        BoardViewModel.BoardViewModelFactory(requireContext())
+    }
+    private val taskAdapter: TaskAdapter by lazy {
+        TaskAdapter(
+            object : ITaskListener {
+                override fun onTaskClicked(task: Task) {
+                    findNavController().navigate(R.id.taskDetailFragment)
+                }
+            },
+            requireContext()
+        )
     }
     private var clicked = false
 
@@ -69,33 +85,71 @@ class BoardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val taskAdapter = TaskAdapter(
-            object : ITaskListener {
-                override fun onTaskClicked(task: Task) {
-                    val bundle = Bundle()
-                    bundle.putParcelable(getString(R.string.task_detail), task)
-                    findNavController().navigate(R.id.taskDetailFragment, bundle)
-                }
-            },
-            requireContext()
-        )
-        val projectAdapter = ProjectAdapter(requireContext())
         binding.apply {
             rvTasks.adapter = taskAdapter
             rvTasks.layoutManager = LinearLayoutManager(context)
-            taskViewModel.getAllTasks().observe(viewLifecycleOwner) {
-                taskAdapter.setData(it)
-            }
-            rvProjects.adapter = projectAdapter
-            rvProjects.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            projectViewModel.getAllProjects().observe(viewLifecycleOwner) {
-                projectAdapter.setData(it)
-            }
+            observeAll()
             btnAdd.setOnClickListener { onBtnAddClick() }
             btnAddTask.setOnClickListener { onBtnAddTaskClick() }
             btnAddProject.setOnClickListener { onBtnAddProjectClick() }
+            initChipGroup()
         }
+    }
+
+    private fun observeAll() {
+        viewModel.getAllTasks().observe(viewLifecycleOwner) {
+            taskAdapter.setData(it)
+        }
+    }
+
+    private fun observeByProjectId(projectId: Int) {
+        viewModel.getTasksByProjectId(projectId).observe(viewLifecycleOwner) {
+            taskAdapter.setData(it)
+        }
+    }
+
+    private fun initChipGroup() {
+        binding.apply {
+            viewModel.getAllProjects().observe(viewLifecycleOwner) {
+                cgProjects.removeAllViews()
+                val chipAll = Chip(context).apply {
+                    id = 0
+                    text = getString(R.string.all)
+                    isCheckable = true
+                    isChecked = true
+                }
+                chipAll.setOnClickListener { view ->
+                    val chipView = (view as Chip)
+                    if (chipView.isChecked) {
+                        observeAll()
+                    } else {
+                        chipView.isChecked = true
+                    }
+                }
+                cgProjects.addView(chipAll)
+                it.forEach { project ->
+                    val chip = Chip(context).apply {
+                        id = project.id
+                        text = project.name
+                        isCheckable = true
+                    }
+                    chip.setOnClickListener { view -> onChipClick(view as Chip) }
+                    cgProjects.addView(chip)
+                }
+            }
+        }
+    }
+
+    private fun onChipClick(chip: Chip) {
+        if (chip.isChecked) {
+            observeByProjectId(chip.id)
+            return
+        }
+        ProjectDetailDialogFragment(chip.id).show(
+            childFragmentManager,
+            "ProjectDetailDialogFragment"
+        )
+        chip.isChecked = true
     }
 
     private fun onBtnAddClick() {
@@ -104,41 +158,31 @@ class BoardFragment : Fragment() {
                 btnAdd.startAnimation(rotateClockwise)
                 btnAddTask.visibility = View.VISIBLE
                 btnAddProject.visibility = View.VISIBLE
-                btnAddTask.startAnimation(fadeIn)
-                btnAddProject.startAnimation(fadeIn)
+                btnAddTask.startAnimation(fadeIn100)
+                btnAddProject.startAnimation(fadeIn200)
                 true
             } else {
                 btnAdd.startAnimation(rotateCounterClockwise)
                 btnAddTask.visibility = View.GONE
                 btnAddProject.visibility = View.GONE
-                btnAddTask.startAnimation(fadeOut)
-                btnAddProject.startAnimation(fadeOut)
+                btnAddTask.startAnimation(fadeOut100)
+                btnAddProject.startAnimation(fadeOut200)
                 false
             }
         }
     }
 
     private fun onBtnAddTaskClick() {
-        val bundle = Bundle()
-        bundle.putSerializable(getString(R.string.add_task), object : ICreateTaskListener {
-            override fun onCreateTask(task: Task) {
-                taskViewModel.insertTask(task)
-            }
-        })
-        findNavController().navigate(R.id.createTaskFragment, bundle)
+        findNavController().navigate(R.id.createTaskFragment)
     }
 
     private fun onBtnAddProjectClick() {
-        CreateProjectDialogFragment(object : ICreateProjectListener {
-            override fun onCreateProject(project: Project) {
-                projectViewModel.insertProject(project)
-            }
-
-        }).show(childFragmentManager, "CreateProjectDialogFragment")
+        CreateProjectDialogFragment().show(childFragmentManager, "CreateProjectDialogFragment")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        clicked = false
         _binding = null
     }
 }

@@ -126,6 +126,7 @@ class CreateTaskFragment : Fragment() {
     }
 
     private fun onChipDateClick() {
+        // Fixing later
         val materialDatePicker = MaterialDatePicker.Builder.datePicker()
             .build()
         materialDatePicker.addOnPositiveButtonClickListener {

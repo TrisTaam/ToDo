@@ -15,7 +15,10 @@ import androidx.room.PrimaryKey
 //        )
 //    ]
 )
-data class Subtask(var name: String, var taskId: Int, var status: Boolean) {
+data class Subtask(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    var id: Int = 0,
+    var name: String,
+    var taskId: Int,
+    var status: Boolean
+)

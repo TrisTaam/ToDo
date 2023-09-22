@@ -13,6 +13,7 @@ import com.tristaam.todo.database.task.TaskRepository
 import com.tristaam.todo.model.Project
 import com.tristaam.todo.model.Subtask
 import com.tristaam.todo.model.Task
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateTaskViewModel(context: Context) : ViewModel() {
@@ -21,7 +22,7 @@ class CreateTaskViewModel(context: Context) : ViewModel() {
     private val subtaskRepository: SubtaskRepository
     var projectId: Int = 0
     private var _subtasks = MutableLiveData<List<Subtask>>()
-    private val subtasks get() = _subtasks
+    val subtasks get() = _subtasks
 
     init {
         taskRepository = TaskRepository(context)
@@ -29,8 +30,14 @@ class CreateTaskViewModel(context: Context) : ViewModel() {
         subtaskRepository = SubtaskRepository(context)
     }
 
-    fun insertTask(task: Task) = viewModelScope.launch {
-        taskRepository.insertTask(task)
+    fun insertTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
+        val taskId = taskRepository.insertTask(task)
+        val list = this@CreateTaskViewModel.getAllSubtasks()
+        list.forEach {
+            it.taskId = taskId
+            subtaskRepository.insertSubtask(it)
+            Log.d("CreateTaskViewModel", "insertTask: $it")
+        }
     }
 
     fun getProject(id: Int): LiveData<Project> = projectRepository.getProject(id)
@@ -39,15 +46,33 @@ class CreateTaskViewModel(context: Context) : ViewModel() {
         subtaskRepository.insertSubtask(subtask)
     }
 
-    fun updateSubtask(subtask: Subtask) = viewModelScope.launch {
-        subtaskRepository.updateSubtask(subtask)
+    fun getAllSubtasks(): MutableList<Subtask> {
+        return _subtasks.value?.toMutableList() ?: mutableListOf()
     }
 
-    fun deleteSubtask(subtask: Subtask) = viewModelScope.launch {
-        subtaskRepository.deleteSubtask(subtask)
+    fun addSubtask(subtask: Subtask) {
+        val list = this.getAllSubtasks()
+        list.add(subtask)
+        _subtasks.value = list
     }
 
-    fun getAllSubtasks(): LiveData<List<Subtask>> = subtaskRepository.getAllSubtasks()
+    fun deleteSubtask(position: Int) {
+        val list = this.getAllSubtasks()
+        list.removeAt(position)
+        _subtasks.value = list
+    }
+
+    fun updateSubtaskStatus(position: Int) {
+        val list = this.getAllSubtasks()
+        list[position].status = !list[position].status
+        _subtasks.value = list
+    }
+
+    fun updateSubtaskName(position: Int, newName: String) {
+        val list = this.getAllSubtasks()
+        list[position].name = newName
+        _subtasks.value = list
+    }
 
     class CreateTaskViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

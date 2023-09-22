@@ -33,7 +33,9 @@ class CreateProjectDialogFragment : BottomSheetDialogFragment() {
 
     private fun onBtnCreateProjectClick() {
         binding.apply {
-            viewModel.insertProject(Project(etProjectName.text.toString()))
+            viewModel.insertProject(
+                Project(name = etProjectName.text.toString())
+            )
         }
         dismiss()
     }

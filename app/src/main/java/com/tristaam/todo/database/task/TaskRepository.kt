@@ -12,7 +12,7 @@ class TaskRepository(context: Context) {
         taskDao = TodoDatabase.getInstance(context).taskDao()
     }
 
-    suspend fun insertTask(task: Task) = taskDao.insertTask(task)
+    suspend fun insertTask(task: Task): Int = taskDao.insertTask(task).toInt()
     suspend fun updateTask(task: Task) = taskDao.updateTask(task)
     suspend fun deleteTask(task: Task) = taskDao.deleteTask(task)
     fun getAllTasks(): LiveData<List<Task>> = taskDao.getAllTasks()

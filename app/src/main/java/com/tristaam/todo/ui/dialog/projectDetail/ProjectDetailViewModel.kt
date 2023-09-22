@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tristaam.todo.database.project.ProjectRepository
 import com.tristaam.todo.model.Project
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProjectDetailViewModel(context: Context) : ViewModel() {
@@ -14,13 +15,13 @@ class ProjectDetailViewModel(context: Context) : ViewModel() {
         projectRepository = ProjectRepository(context)
     }
 
-    fun updateProject(project: Project) = viewModelScope.launch {
+    fun updateProject(project: Project) = viewModelScope.launch(Dispatchers.IO) {
         projectRepository.updateProject(project)
     }
 
     fun getProject(id: Int) = projectRepository.getProject(id)
 
-    fun deleteProject(project: Project) = viewModelScope.launch {
+    fun deleteProject(project: Project) = viewModelScope.launch(Dispatchers.IO) {
         projectRepository.deleteProject(project)
     }
 }

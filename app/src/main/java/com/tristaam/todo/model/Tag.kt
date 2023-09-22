@@ -15,7 +15,9 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-class Tag(var name: String, var taskId: Int) {
+class Tag(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    var id: Int = 0,
+    var name: String,
+    var taskId: Int
+)

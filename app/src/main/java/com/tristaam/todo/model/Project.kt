@@ -4,7 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "project_table")
-class Project(var name: String) {
+class Project(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    var id: Int = 0,
+    var name: String
+)

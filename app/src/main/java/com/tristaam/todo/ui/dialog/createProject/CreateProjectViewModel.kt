@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.tristaam.todo.database.project.ProjectRepository
 import com.tristaam.todo.model.Project
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateProjectViewModel(context: Context):ViewModel() {
@@ -15,7 +16,7 @@ class CreateProjectViewModel(context: Context):ViewModel() {
         projectRepository = ProjectRepository(context)
     }
 
-    fun insertProject(project: Project) = viewModelScope.launch {
+    fun insertProject(project: Project) = viewModelScope.launch(Dispatchers.IO) {
         projectRepository.insertProject(project)
     }
 

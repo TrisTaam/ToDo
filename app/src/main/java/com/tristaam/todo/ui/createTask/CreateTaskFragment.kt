@@ -1,9 +1,11 @@
 package com.tristaam.todo.ui.createTask
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +27,7 @@ import com.tristaam.todo.ui.dialog.selectPriority.SelectPriorityDialogFragment
 import com.tristaam.todo.ui.dialog.selectProject.ISelectProjectListener
 import com.tristaam.todo.ui.dialog.selectProject.SelectProjectDialogFragment
 import com.tristaam.todo.utils.DateTimeUtils
+import java.time.LocalTime
 
 class CreateTaskFragment : Fragment() {
     private var _binding: FragmentCreateTaskBinding? = null
@@ -36,14 +39,22 @@ class CreateTaskFragment : Fragment() {
     }
     private val subtaskAdapter: SubtaskAdapter by lazy {
         SubtaskAdapter(object : ISubtaskListener {
-            override fun onTick(subtask: Subtask, isChecked: Boolean) {
-                subtask.status = isChecked
-                // Conflict with subtaskAdapter.setData()
-                viewModel.updateSubtask(subtask)
+            override fun onTick(position: Int) {
+                viewModel.updateSubtaskStatus(position)
+                subtaskAdapter.setData(viewModel.getAllSubtasks())
+                subtaskAdapter.notifyItemChanged(position)
             }
 
-            override fun onDelete(subtask: Subtask) {
-                viewModel.deleteSubtask(subtask)
+            override fun onDelete(position: Int) {
+                viewModel.deleteSubtask(position)
+                subtaskAdapter.setData(viewModel.getAllSubtasks())
+                subtaskAdapter.notifyItemRemoved(position)
+            }
+
+            override fun onSave(position: Int, newName: String) {
+                viewModel.updateSubtaskName(position, newName)
+                subtaskAdapter.setData(viewModel.getAllSubtasks())
+                subtaskAdapter.notifyItemChanged(position)
             }
         })
     }
@@ -85,16 +96,15 @@ class CreateTaskFragment : Fragment() {
 
     private fun onClAddSubtaskClick() {
         binding.apply {
-            viewModel.insertSubtask(
+            viewModel.addSubtask(
                 Subtask(
-                    "",
-                    0,
-                    false
+                    name = "",
+                    taskId = 0,
+                    status = false
                 )
             )
-            viewModel.getAllSubtasks().observe(viewLifecycleOwner) {
-                subtaskAdapter.setData(it)
-            }
+            subtaskAdapter.setData(viewModel.getAllSubtasks())
+            subtaskAdapter.notifyItemInserted(viewModel.getAllSubtasks().size - 1)
         }
     }
 
@@ -129,6 +139,7 @@ class CreateTaskFragment : Fragment() {
     private fun onChipDateClick() {
         // Fixing later
         val materialDatePicker = MaterialDatePicker.Builder.datePicker()
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
         materialDatePicker.addOnPositiveButtonClickListener {
             binding.chipDate.text =
@@ -141,6 +152,8 @@ class CreateTaskFragment : Fragment() {
     private fun onChipTimeClick() {
         val materialTimePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(LocalTime.now().hour)
+            .setMinute(LocalTime.now().minute)
             .build()
         materialTimePicker.addOnPositiveButtonClickListener {
             binding.chipTime.text =
@@ -154,12 +167,12 @@ class CreateTaskFragment : Fragment() {
             binding.apply {
                 viewModel.insertTask(
                     Task(
-                        etTaskTitle.text.toString(),
-                        etDescription.text.toString(),
-                        viewModel.projectId,
-                        DateTimeUtils.inputFormat.parse("${chipDate.text} ${chipTime.text}")!!,
-                        false,
-                        Priority.valueOf(priorityText.uppercase())
+                        title = etTaskTitle.text.toString(),
+                        description = etDescription.text.toString(),
+                        projectId = viewModel.projectId,
+                        dueDate = DateTimeUtils.inputFormat.parse("${chipDate.text} ${chipTime.text}")!!,
+                        status = false,
+                        priority = Priority.valueOf(priorityText.uppercase())
                     )
                 )
             }

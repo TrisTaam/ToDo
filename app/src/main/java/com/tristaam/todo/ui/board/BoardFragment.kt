@@ -20,6 +20,7 @@ import com.tristaam.todo.databinding.FragmentBoardBinding
 import com.tristaam.todo.model.Task
 import com.tristaam.todo.ui.dialog.createProject.CreateProjectDialogFragment
 import com.tristaam.todo.ui.dialog.projectDetail.ProjectDetailDialogFragment
+import com.tristaam.todo.ui.taskdetail.TaskDetailFragment
 
 class BoardFragment : Fragment() {
     private var _binding: FragmentBoardBinding? = null
@@ -67,7 +68,14 @@ class BoardFragment : Fragment() {
         TaskAdapter(
             object : ITaskListener {
                 override fun onTaskClicked(task: Task) {
-                    findNavController().navigate(R.id.taskDetailFragment)
+                    val bundle = Bundle()
+                    bundle.putInt(TaskDetailFragment.TASK_ID, task.id)
+                    findNavController().navigate(R.id.taskDetailFragment, bundle)
+                }
+
+                override fun onTaskTick(task: Task) {
+                    task.status = !task.status
+                    viewModel.updateTask(task)
                 }
             },
             requireContext()
@@ -157,16 +165,24 @@ class BoardFragment : Fragment() {
             clicked = if (!clicked) {
                 btnAdd.startAnimation(rotateClockwise)
                 btnAddTask.visibility = View.VISIBLE
+                tvAddTask.visibility = View.VISIBLE
                 btnAddProject.visibility = View.VISIBLE
+                tvAddProject.visibility = View.VISIBLE
                 btnAddTask.startAnimation(fadeIn100)
+                tvAddTask.startAnimation(fadeIn100)
                 btnAddProject.startAnimation(fadeIn200)
+                tvAddProject.startAnimation(fadeIn200)
                 true
             } else {
                 btnAdd.startAnimation(rotateCounterClockwise)
                 btnAddTask.visibility = View.GONE
+                tvAddTask.visibility = View.GONE
                 btnAddProject.visibility = View.GONE
+                tvAddProject.visibility = View.GONE
                 btnAddTask.startAnimation(fadeOut100)
+                tvAddTask.startAnimation(fadeOut100)
                 btnAddProject.startAnimation(fadeOut200)
+                tvAddProject.startAnimation(fadeOut200)
                 false
             }
         }

@@ -3,6 +3,7 @@ package com.tristaam.todo.adapter.task
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.tristaam.todo.R
@@ -19,16 +20,41 @@ class TaskAdapter(private val listener: ITaskListener, private val context: Cont
         RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.apply {
+                cbTask.isChecked = task.status
                 tvTaskTitle.text = task.title
                 tvDescription.text = task.description
                 tvDueDate.text = DateTimeUtils.dateFormat.format(task.dueDate)
                 when (task.priority) {
-                    Priority.URGENT -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_red))
-                    Priority.HIGH -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_orange))
-                    Priority.MEDIUM -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_yellow))
-                    Priority.LOW -> ivFlag.setImageDrawable(context.resources.getDrawable(R.drawable.ic_flag_green))
+                    Priority.URGENT -> ivFlag.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_flag_red
+                        )
+                    )
+
+                    Priority.HIGH -> ivFlag.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_flag_orange
+                        )
+                    )
+
+                    Priority.MEDIUM -> ivFlag.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_flag_yellow
+                        )
+                    )
+
+                    Priority.LOW -> ivFlag.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_flag_green
+                        )
+                    )
                 }
                 clTask.setOnClickListener { listener.onTaskClicked(task) }
+                cbTask.setOnClickListener { listener.onTaskTick(task) }
             }
         }
     }

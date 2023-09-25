@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
+        style="@style/header"
         android:id="@+id/tvCreateProject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,6 +28,8 @@
         app:layout_constraintTop_toBottomOf="@id/ivDrawHolder" />
 
     <com.google.android.material.textfield.TextInputEditText
+        style="@style/editTextBody1"
+        android:layout_marginTop="16dp"
         android:id="@+id/etProjectName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -44,7 +47,8 @@
         android:minWidth="0dp"
         app:icon="@drawable/ic_add"
         app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etProjectName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCreateProject" />
+        app:layout_constraintTop_toTopOf="@+id/etProjectName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

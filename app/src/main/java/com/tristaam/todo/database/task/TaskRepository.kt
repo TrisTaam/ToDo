@@ -18,4 +18,6 @@ class TaskRepository(context: Context) {
     fun getAllTasks(): LiveData<List<Task>> = taskDao.getAllTasks()
     fun getTasksByProjectId(projectId: Int): LiveData<List<Task>> =
         taskDao.getTasksByProjectId(projectId)
+
+    fun getTaskById(taskId: Int): LiveData<Task> = taskDao.getTaskById(taskId)
 }

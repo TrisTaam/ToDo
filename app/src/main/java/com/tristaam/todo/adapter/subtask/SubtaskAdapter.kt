@@ -1,5 +1,6 @@
 package com.tristaam.todo.adapter.subtask
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,6 +19,7 @@ class SubtaskAdapter(private val listener: ISubtaskListener) :
                 checkBoxSubtask.isChecked = subTask.status
                 etSubtaskName.setText(subTask.name)
                 checkBoxSubtask.setOnClickListener {
+                    etSubtaskName.clearFocus()
                     listener.onTick(adapterPosition)
                 }
                 btnDeleteSubtask.setOnClickListener {

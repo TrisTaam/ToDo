@@ -1,7 +1,6 @@
-package com.tristaam.todo.ui.createTask
+package com.tristaam.todo.ui.taskdetail
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,11 +16,12 @@ import com.tristaam.todo.model.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CreateTaskViewModel(context: Context) : ViewModel() {
+class TaskDetailViewModel(context: Context) : ViewModel() {
     private val taskRepository: TaskRepository
     private val projectRepository: ProjectRepository
     private val subtaskRepository: SubtaskRepository
     var projectId: Int = 0
+    lateinit var task: Task
     private var _subtasks = MutableLiveData<List<Subtask>>()
     val subtasks get() = _subtasks.value?.toMutableList() ?: mutableListOf()
     private var _priority = MutableLiveData<Priority>()
@@ -33,16 +33,20 @@ class CreateTaskViewModel(context: Context) : ViewModel() {
         subtaskRepository = SubtaskRepository(context)
     }
 
-    fun insertTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
-        val taskId = taskRepository.insertTask(task)
+    fun updateTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
+        taskRepository.updateTask(task)
+        subtaskRepository.deleteSubtasksByTaskId(task.id)
         subtasks.forEach {
-            it.taskId = taskId
             subtaskRepository.insertSubtask(it)
-            Log.d("CreateTaskViewModel", "insertTask: $it")
         }
     }
 
+    fun getTaskById(taskId: Int): LiveData<Task> = taskRepository.getTaskById(taskId)
+
     fun getProject(id: Int): LiveData<Project> = projectRepository.getProject(id)
+
+    fun getSubtasksByTaskId(taskId: Int): LiveData<List<Subtask>> =
+        subtaskRepository.getSubtasksByTaskId(taskId)
 
     fun addSubtask(subtask: Subtask) {
         val list = subtasks
@@ -72,11 +76,15 @@ class CreateTaskViewModel(context: Context) : ViewModel() {
         _priority.value = priority
     }
 
-    class CreateTaskViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    fun setSubtasks(subtasks: List<Subtask>) {
+        _subtasks.value = subtasks
+    }
+
+    class TaskDetailViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(CreateTaskViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(TaskDetailViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return CreateTaskViewModel(context) as T
+                return TaskDetailViewModel(context) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

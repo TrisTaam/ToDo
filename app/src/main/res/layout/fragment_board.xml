@@ -50,7 +50,19 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/btnAdd"
         app:layout_constraintEnd_toEndOf="@id/btnAdd"
-        app:layout_constraintStart_toStartOf="@id/btnAdd" />
+        app:layout_constraintStart_toStartOf="@id/btnAdd"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvAddTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_a_task"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/btnAddTask"
+        app:layout_constraintEnd_toStartOf="@id/btnAddTask"
+        app:layout_constraintTop_toTopOf="@id/btnAddTask"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAddProject"
@@ -63,6 +75,18 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/btnAddTask"
         app:layout_constraintEnd_toEndOf="@id/btnAdd"
-        app:layout_constraintStart_toStartOf="@id/btnAdd" />
+        app:layout_constraintStart_toStartOf="@id/btnAdd"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvAddProject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_a_project"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/btnAddProject"
+        app:layout_constraintEnd_toStartOf="@id/btnAddProject"
+        app:layout_constraintTop_toTopOf="@id/btnAddProject"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="editText" parent="ThemeOverlay.Material3.TextInputEditText">
+    <style name="editTextHeader1" parent="ThemeOverlay.Material3.TextInputEditText">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:background">@null</item>
     </style>
 
-    <style name="iconSize">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+    <style name="editTextHeader2" parent="ThemeOverlay.Material3.TextInputEditText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="editTextBody1">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="editTextBody2">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="button" parent="Widget.MaterialComponents.Button">
@@ -19,9 +31,24 @@
     <style name="option">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:paddingHorizontal">16dp</item>
-        <item name="android:paddingVertical">4dp</item>
+        <item name="android:paddingVertical">16dp</item>
     </style>
 
     <style name="toolbarTitle" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="header">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="body1">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="body2">
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

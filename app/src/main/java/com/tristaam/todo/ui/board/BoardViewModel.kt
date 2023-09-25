@@ -20,6 +20,10 @@ class BoardViewModel(context: Context) : ViewModel() {
         projectRepository = ProjectRepository(context)
     }
 
+    fun updateTask(task: Task) = viewModelScope.launch {
+        taskRepository.updateTask(task)
+    }
+
     fun getAllTasks(): LiveData<List<Task>> = taskRepository.getAllTasks()
 
     fun getAllProjects(): LiveData<List<Project>> = projectRepository.getAllProjects()

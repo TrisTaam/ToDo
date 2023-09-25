@@ -21,4 +21,10 @@ interface SubtaskDao {
 
     @Query("SELECT * FROM subtask_table")
     fun getAllSubtasks(): LiveData<List<Subtask>>
+
+    @Query("SELECT * FROM subtask_table WHERE taskId = :taskId")
+    fun getSubtasksByTaskId(taskId: Int): LiveData<List<Subtask>>
+
+    @Query("DELETE FROM subtask_table WHERE taskId = :taskId")
+    suspend fun deleteSubtasksByTaskId(taskId: Int)
 }

@@ -16,8 +16,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvProjectDetail"
+        style="@style/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -30,6 +31,7 @@
         android:id="@+id/etProjectName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/project_name"
         app:layout_constraintEnd_toStartOf="@id/btnProjectSave"
@@ -41,18 +43,21 @@
         style="?attr/materialIconButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         app:icon="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="@id/etProjectName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/etProjectName" />
 
     <com.google.android.material.divider.MaterialDivider
+        android:layout_marginTop="4dp"
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/etProjectName" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="4dp"
         android:id="@+id/clDeleteProject"
         style="@style/option"
         android:layout_width="match_parent"
@@ -65,13 +70,17 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_delete"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/red" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDelete"
+            style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/delete"
+            android:textColor="@color/red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivDelete"
             app:layout_constraintTop_toTopOf="parent" />

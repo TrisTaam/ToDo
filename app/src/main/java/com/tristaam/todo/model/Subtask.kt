@@ -6,14 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "subtask_table",
-//    foreignKeys = [
-//        ForeignKey(
-//            entity = Task::class,
-//            parentColumns = ["id"],
-//            childColumns = ["taskId"],
-//            onDelete = ForeignKey.CASCADE
-//        )
-//    ]
+    foreignKeys = [
+        ForeignKey(
+            entity = Task::class,
+            parentColumns = ["id"],
+            childColumns = ["taskId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class Subtask(
     @PrimaryKey(autoGenerate = true)

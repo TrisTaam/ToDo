@@ -6,11 +6,6 @@
         android:title="@string/board" />
 
     <item
-        android:id="@+id/unplannedFragment"
-        android:icon="@drawable/selector_unplanned"
-        android:title="@string/unplanned" />
-
-    <item
         android:id="@+id/timeLineFragment"
         android:icon="@drawable/selector_timeline"
         android:title="@string/timeline" />

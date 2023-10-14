@@ -15,6 +15,7 @@ import com.tristaam.todo.model.Subtask
 import com.tristaam.todo.model.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class TaskDetailViewModel(context: Context) : ViewModel() {
     private val taskRepository: TaskRepository
@@ -26,6 +27,8 @@ class TaskDetailViewModel(context: Context) : ViewModel() {
     val subtasks get() = _subtasks.value?.toMutableList() ?: mutableListOf()
     private var _priority = MutableLiveData<Priority>()
     val priority get() = _priority
+    private var _remindBefore = MutableLiveData<Date>()
+    val remindBefore get() = _remindBefore
 
     init {
         taskRepository = TaskRepository(context)
@@ -44,6 +47,10 @@ class TaskDetailViewModel(context: Context) : ViewModel() {
     fun getTaskById(taskId: Int): LiveData<Task> = taskRepository.getTaskById(taskId)
 
     fun getProject(id: Int): LiveData<Project> = projectRepository.getProject(id)
+
+    fun deleteTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
+        taskRepository.deleteTask(task)
+    }
 
     fun getSubtasksByTaskId(taskId: Int): LiveData<List<Subtask>> =
         subtaskRepository.getSubtasksByTaskId(taskId)
@@ -78,6 +85,10 @@ class TaskDetailViewModel(context: Context) : ViewModel() {
 
     fun setSubtasks(subtasks: List<Subtask>) {
         _subtasks.value = subtasks
+    }
+
+    fun setRemindBefore(remindBefore: Date) {
+        _remindBefore.value = remindBefore
     }
 
     class TaskDetailViewModelFactory(private val context: Context) : ViewModelProvider.Factory {

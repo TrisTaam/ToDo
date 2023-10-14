@@ -2,16 +2,17 @@ package com.tristaam.todo.ui.taskdetail
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tristaam.todo.MainActivity
 import com.tristaam.todo.R
 import com.tristaam.todo.adapter.subtask.ISubtaskListener
@@ -19,22 +20,26 @@ import com.tristaam.todo.adapter.subtask.SubtaskAdapter
 import com.tristaam.todo.databinding.FragmentTaskDetailBinding
 import com.tristaam.todo.model.Priority
 import com.tristaam.todo.model.Subtask
-import com.tristaam.todo.model.Task
 import com.tristaam.todo.ui.dialog.selectPriority.ISelectPriorityListener
 import com.tristaam.todo.ui.dialog.selectPriority.SelectPriorityDialogFragment
 import com.tristaam.todo.ui.dialog.selectProject.ISelectProjectListener
 import com.tristaam.todo.ui.dialog.selectProject.SelectProjectDialogFragment
+import com.tristaam.todo.utils.Alarm
 import com.tristaam.todo.utils.DateTimeUtils
+import com.tristaam.todo.utils.DateTimeUtils.getHour
+import com.tristaam.todo.utils.DateTimeUtils.getMinute
+import com.tristaam.todo.utils.DateTimeUtils.minus
 import com.tristaam.todo.utils.datePicker.DatePickerDialog
 import com.tristaam.todo.utils.datePicker.IDatePickerListener
+import com.tristaam.todo.utils.observeOnce
 import com.tristaam.todo.utils.timePicker.ITimePickerListener
 import com.tristaam.todo.utils.timePicker.TimePickerDialog
+import java.text.ParseException
+import java.util.Date
 
 class TaskDetailFragment : Fragment() {
     private var _binding: FragmentTaskDetailBinding? = null
     private val binding get() = _binding!!
-    private var _priorityText: String? = null
-    private val priorityText get() = _priorityText!!
     private val viewModel: TaskDetailViewModel by viewModels {
         TaskDetailViewModel.TaskDetailViewModelFactory(requireContext())
     }
@@ -92,12 +97,25 @@ class TaskDetailFragment : Fragment() {
         val taskId = arguments?.getInt(TASK_ID) ?: 0
         binding.apply {
             toolbar.setNavigationOnClickListener { onBackPressed() }
-            btnCreateTask.setOnClickListener { onBtnCreateTaskClick() }
+            toolbar.menu.findItem(R.id.action_delete).setOnMenuItemClickListener {
+                MaterialAlertDialogBuilder(requireContext()).apply {
+                    setTitle(getString(R.string.delete))
+                    setMessage(getString(R.string.delete_task_alert))
+                    setPositiveButton("Yes") { _, _ ->
+                        viewModel.deleteTask(viewModel.task)
+                        findNavController().popBackStack()
+                    }
+                    setNegativeButton("No") { _, _ -> }
+                    show()
+                }
+                true
+            }
             chipDate.setOnClickListener { onChipDateClick() }
             chipTime.setOnClickListener { onChipTimeClick() }
             clPriority.setOnClickListener { onClPriorityClick() }
             clProject.setOnClickListener { onClProjectClick() }
             clAddSubtask.setOnClickListener { onClAddSubtaskClick() }
+            clReminder.setOnClickListener { onClReminderClick() }
             rvSubtasks.adapter = subtaskAdapter
             rvSubtasks.layoutManager = LinearLayoutManager(context)
             viewModel.getTaskById(taskId).observe(viewLifecycleOwner) {
@@ -110,6 +128,7 @@ class TaskDetailFragment : Fragment() {
                     viewModel.projectId = project.id
                     tvProject.text = project.name
                 }
+                viewModel.setRemindBefore(it.dueDate.minus(it.remindAt))
                 chipDate.text = DateTimeUtils.dateFormat.format(it.dueDate)
                 chipTime.text = DateTimeUtils.timeFormat.format(it.dueDate)
                 viewModel.getSubtasksByTaskId(taskId).observe(viewLifecycleOwner) { subtasks ->
@@ -117,9 +136,46 @@ class TaskDetailFragment : Fragment() {
                     subtaskAdapter.setData(viewModel.subtasks)
                     subtaskAdapter.notifyDataSetChanged()
                 }
+                viewModel.remindBefore.observe(viewLifecycleOwner) { remindBefore ->
+                    tvReminder.text =
+                        getString(
+                            R.string.reminder,
+                            remindBefore.getHour(),
+                            remindBefore.getMinute()
+                        )
+                }
+                cancelAlarm(it.id * 2, it.title, "Your task is due date")
+                cancelAlarm(
+                    it.id * 2 + 1,
+                    it.title,
+                    "Your task is ${tvReminder.text} due date"
+                )
             }
             initPriorityViewGroup()
         }
+    }
+
+    private fun onClReminderClick() {
+        TimePickerDialog.show(
+            childFragmentManager,
+            "Time picker",
+            false,
+            object : ITimePickerListener {
+                override fun onTimeSelected(hour: Int, minute: Int) {
+                    try {
+                        viewModel.setRemindBefore(
+                            DateTimeUtils.timeFormat.parse(
+                                "%02d:%02d".format(
+                                    hour,
+                                    minute
+                                )
+                            )!!
+                        )
+                    } catch (e: ParseException) {
+                        Log.e("DetailTaskFragment", "onTimeSelected: ${e.message}")
+                    }
+                }
+            })
     }
 
     private fun initPriorityViewGroup() {
@@ -210,7 +266,17 @@ class TaskDetailFragment : Fragment() {
     }
 
     private fun onBackPressed() {
-        findNavController().popBackStack()
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(getString(R.string.save))
+            setMessage(getString(R.string.save_task_alert))
+            setPositiveButton("Yes") { _, _ ->
+                saveTask()
+            }
+            setNegativeButton("No") { _, _ ->
+                findNavController().popBackStack()
+            }
+            show()
+        }
     }
 
     private fun onClProjectClick() {
@@ -243,14 +309,18 @@ class TaskDetailFragment : Fragment() {
     }
 
     private fun onChipTimeClick() {
-        TimePickerDialog.show(childFragmentManager, "Time picker", object : ITimePickerListener {
-            override fun onTimeSelected(hour: Int, minute: Int) {
-                binding.chipTime.text = getString(R.string.time_format, hour, minute)
-            }
-        })
+        TimePickerDialog.show(
+            childFragmentManager,
+            "Time picker",
+            true,
+            object : ITimePickerListener {
+                override fun onTimeSelected(hour: Int, minute: Int) {
+                    binding.chipTime.text = getString(R.string.time_format, hour, minute)
+                }
+            })
     }
 
-    private fun onBtnCreateTaskClick() {
+    private fun saveTask() {
         try {
             binding.apply {
                 if (etTaskTitle.text.toString().isEmpty() ||
@@ -258,16 +328,28 @@ class TaskDetailFragment : Fragment() {
                 ) {
                     throw Exception()
                 } else {
+                    val dueDateTmp =
+                        DateTimeUtils.dateTimeFormat.parse("${chipDate.text} ${chipTime.text}")!!
+                    var remindAtTmp = Date()
+                    viewModel.remindBefore.observeOnce(viewLifecycleOwner) {
+                        remindAtTmp = dueDateTmp.minus(it)
+                    }
                     viewModel.task.apply {
                         title = etTaskTitle.text.toString()
                         description = etDescription.text.toString()
-                        dueDate = DateTimeUtils.dateTimeFormat.parse(
-                            "${chipDate.text} ${chipTime.text}"
-                        )!!
+                        dueDate = dueDateTmp
+                        remindAt = remindAtTmp
                         status = cbTask.isChecked
                         priority = viewModel.priority.value!!
                         projectId = viewModel.projectId
                         viewModel.updateTask(this)
+                        createAlarm(id * 2, title, "Your task is due date", dueDate)
+                        createAlarm(
+                            id * 2 + 1,
+                            title,
+                            "Your task is ${binding.tvReminder.text} due date",
+                            remindAt
+                        )
                     }
                 }
             }
@@ -275,6 +357,20 @@ class TaskDetailFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun createAlarm(id: Int, title: String, message: String, date: Date) {
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("message", message)
+        Alarm.createAlarm(requireContext(), bundle, id, date)
+    }
+
+    private fun cancelAlarm(id: Int, title: String, message: String) {
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("message", message)
+        Alarm.cancelAlarm(requireContext(), bundle, id)
     }
 
     override fun onDestroyView() {

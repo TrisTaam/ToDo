@@ -24,12 +24,15 @@ import com.tristaam.todo.ui.dialog.selectPriority.ISelectPriorityListener
 import com.tristaam.todo.ui.dialog.selectPriority.SelectPriorityDialogFragment
 import com.tristaam.todo.ui.dialog.selectProject.ISelectProjectListener
 import com.tristaam.todo.ui.dialog.selectProject.SelectProjectDialogFragment
+import com.tristaam.todo.utils.Alarm
 import com.tristaam.todo.utils.DateTimeUtils
+import com.tristaam.todo.utils.DateTimeUtils.minus
 import com.tristaam.todo.utils.datePicker.DatePickerDialog
 import com.tristaam.todo.utils.datePicker.IDatePickerListener
 import com.tristaam.todo.utils.timePicker.ITimePickerListener
 import com.tristaam.todo.utils.timePicker.TimePickerDialog
 import java.text.ParseException
+import java.util.Date
 
 class CreateTaskFragment : Fragment() {
     private var _binding: FragmentCreateTaskBinding? = null
@@ -99,9 +102,28 @@ class CreateTaskFragment : Fragment() {
             clPriority.setOnClickListener { onClPriorityClick() }
             clProject.setOnClickListener { onClProjectClick() }
             clAddSubtask.setOnClickListener { onClAddSubtaskClick() }
+            clReminder.setOnClickListener { onClReminderClick() }
             rvSubtasks.adapter = subtaskAdapter
             rvSubtasks.layoutManager = LinearLayoutManager(context)
         }
+    }
+
+    private fun onClReminderClick() {
+        TimePickerDialog.show(
+            childFragmentManager,
+            "Time picker",
+            false,
+            object : ITimePickerListener {
+                override fun onTimeSelected(hour: Int, minute: Int) {
+                    binding.tvReminder.text = getString(R.string.reminder, hour, minute)
+                    try {
+                        viewModel.remindBefore =
+                            DateTimeUtils.timeFormat.parse("%02d:%02d".format(hour, minute))!!
+                    } catch (e: ParseException) {
+                        Log.e("CreateTaskFragment", "onTimeSelected: ${e.message}")
+                    }
+                }
+            })
     }
 
     private fun initPriorityViewGroup() {
@@ -225,11 +247,15 @@ class CreateTaskFragment : Fragment() {
     }
 
     private fun onChipTimeClick() {
-        TimePickerDialog.show(childFragmentManager, "Time picker", object : ITimePickerListener {
-            override fun onTimeSelected(hour: Int, minute: Int) {
-                binding.chipTime.text = getString(R.string.time_format, hour, minute)
-            }
-        })
+        TimePickerDialog.show(
+            childFragmentManager,
+            "Time picker",
+            true,
+            object : ITimePickerListener {
+                override fun onTimeSelected(hour: Int, minute: Int) {
+                    binding.chipTime.text = getString(R.string.time_format, hour, minute)
+                }
+            })
     }
 
     private fun onBtnCreateTaskClick() {
@@ -240,15 +266,25 @@ class CreateTaskFragment : Fragment() {
                 ) {
                     throw Exception()
                 } else {
-                    viewModel.insertTask(
-                        Task(
-                            title = etTaskTitle.text.toString(),
-                            description = etDescription.text.toString(),
-                            projectId = viewModel.projectId,
-                            dueDate = DateTimeUtils.dateTimeFormat.parse("${chipDate.text} ${chipTime.text}")!!,
-                            status = false,
-                            priority = viewModel.priority.value!!
-                        )
+                    val dueDate =
+                        DateTimeUtils.dateTimeFormat.parse("${chipDate.text} ${chipTime.text}")!!
+                    val remindAt = dueDate.minus(viewModel.remindBefore)
+                    val task = Task(
+                        title = etTaskTitle.text.toString(),
+                        description = etDescription.text.toString(),
+                        projectId = viewModel.projectId,
+                        dueDate = dueDate,
+                        remindAt = remindAt,
+                        status = false,
+                        priority = viewModel.priority.value!!
+                    )
+                    viewModel.insertTask(task)
+                    createAlarm(task.id * 2, task.title, "Your task is due date", dueDate)
+                    createAlarm(
+                        task.id * 2 + 1,
+                        task.title,
+                        "Your task is ${binding.tvReminder.text} due date",
+                        remindAt
                     )
                 }
             }
@@ -256,6 +292,13 @@ class CreateTaskFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun createAlarm(id: Int, title: String, message: String, date: Date) {
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("message", message)
+        Alarm.createAlarm(requireContext(), bundle, id, date)
     }
 
     override fun onDestroyView() {

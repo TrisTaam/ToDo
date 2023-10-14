@@ -16,6 +16,7 @@ import com.tristaam.todo.model.Subtask
 import com.tristaam.todo.model.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class CreateTaskViewModel(context: Context) : ViewModel() {
     private val taskRepository: TaskRepository
@@ -26,6 +27,7 @@ class CreateTaskViewModel(context: Context) : ViewModel() {
     val subtasks get() = _subtasks.value?.toMutableList() ?: mutableListOf()
     private var _priority = MutableLiveData<Priority>()
     val priority get() = _priority
+    lateinit var remindBefore: Date
 
     init {
         taskRepository = TaskRepository(context)

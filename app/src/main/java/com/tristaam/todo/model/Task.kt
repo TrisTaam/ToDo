@@ -23,6 +23,7 @@ data class Task(
     var description: String,
     var projectId: Int,
     var dueDate: Date,
+    var remindAt: Date,
     var status: Boolean,
     var priority: Priority
 )

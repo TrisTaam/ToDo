@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_task_detail"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/task_detail"
         app:titleTextAppearance="@style/toolbarTitle" />
@@ -125,7 +126,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clNotification"
+                android:id="@+id/clReminder"
                 style="@style/option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,11 +141,12 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvReminder"
                     style="@style/body2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/reminder"
+                    android:text="@string/add_reminder"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/ivNotification"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -156,7 +158,7 @@
                 style="@style/option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/clNotification">
+                app:layout_constraintTop_toBottomOf="@id/clReminder">
 
                 <ImageView
                     android:id="@+id/ivPriority"
@@ -272,17 +274,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnCreateTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:src="@drawable/ic_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

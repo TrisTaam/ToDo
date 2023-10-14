@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/clTask"
+    style="@style/rippleStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cbTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +27,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTaskTitle"
+        style="@style/body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/cbTask"
@@ -34,6 +37,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvDescription"
+        style="@style/body3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/ivFlag"
@@ -42,12 +46,21 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvDueDate"
+        style="@style/body3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/round_corner"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Task due date" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

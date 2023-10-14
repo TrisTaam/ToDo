@@ -11,7 +11,7 @@
     <string name="project">Select project</string>
     <string name="date">Date</string>
     <string name="time">Add time</string>
-    <string name="reminder">Add reminder</string>
+    <string name="add_reminder">Add reminder</string>
     <string name="priority">Set priority</string>
     <string name="subtasks">Add subtasks</string>
     <string name="assign_tags">Assign tags</string>
@@ -35,4 +35,13 @@
     <string name="delete_project_alert">Are you sure you want to delete this project?</string>
     <string name="create_a_task">Create a task</string>
     <string name="create_a_project">Create a project</string>
+    <string name="search">Search</string>
+    <string name="delete_task">Delete task</string>
+    <string name="delete_task_alert">Are you sure you want to delete this task?</string>
+    <string name="save">Save</string>
+    <string name="save_task_alert">Are you sure you want to save changes?</string>
+    <string name="progress">%d/%d</string>
+    <string name="progress_percent">%d%%</string>
+    <string name="completed_tasks">Completed tasks (%s)</string>
+    <string name="reminder">%2d hours, %d minutes before</string>
 </resources>

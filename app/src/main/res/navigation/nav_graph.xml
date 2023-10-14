@@ -12,11 +12,6 @@
         android:label="fragment_board"
         tools:layout="@layout/fragment_board" />
     <fragment
-        android:id="@+id/unplannedFragment"
-        android:name="com.tristaam.todo.ui.unplanned.UnplannedFragment"
-        android:label="fragment_unplanned"
-        tools:layout="@layout/fragment_unplanned" />
-    <fragment
         android:id="@+id/timeLineFragment"
         android:name="com.tristaam.todo.ui.timeline.TimelineFragment"
         android:label="fragment_time_line"
@@ -36,4 +31,9 @@
         android:name="com.tristaam.todo.ui.taskdetail.TaskDetailFragment"
         android:label="fragment_task_detail"
         tools:layout="@layout/fragment_task_detail" />
+    <fragment
+        android:id="@+id/completedTaskFragment"
+        android:name="com.tristaam.todo.ui.completedTask.CompletedTaskFragment"
+        android:label="fragment_completed_task"
+        tools:layout="@layout/fragment_completed_task" />
 </navigation>

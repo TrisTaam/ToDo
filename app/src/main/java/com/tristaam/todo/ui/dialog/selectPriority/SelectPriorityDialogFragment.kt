@@ -1,12 +1,10 @@
 package com.tristaam.todo.ui.dialog.selectPriority
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.tristaam.todo.R
 import com.tristaam.todo.databinding.FragmentSelectPriorityDialogBinding
 import com.tristaam.todo.model.Priority
 

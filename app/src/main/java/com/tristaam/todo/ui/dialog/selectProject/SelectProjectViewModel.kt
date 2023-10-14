@@ -4,10 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.tristaam.todo.database.project.ProjectRepository
 import com.tristaam.todo.model.Project
-import kotlinx.coroutines.launch
 
 class SelectProjectViewModel(context: Context) : ViewModel() {
     private val projectRepository: ProjectRepository

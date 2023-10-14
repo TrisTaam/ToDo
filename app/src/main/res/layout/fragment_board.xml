@@ -6,28 +6,96 @@
     android:layout_height="match_parent"
     tools:context=".ui.board.BoardFragment">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_board"
+        app:titleTextAppearance="@style/toolbarTitle"
+        tools:title="Board" />
+
     <HorizontalScrollView
         android:id="@+id/hsvProjects"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cgProjects"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             app:chipSpacing="8dp"
             app:singleLine="true"
             app:singleSelection="true" />
 
     </HorizontalScrollView>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clProgress"
+        style="@style/option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/hsvProjects">
+
+        <ProgressBar
+            android:id="@+id/pbProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvProgressPercent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="50" />
+
+        <ImageView
+            android:id="@+id/ivDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_done"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pbProgress" />
+
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/ivDone"
+            app:layout_constraintStart_toEndOf="@id/ivDone"
+            app:layout_constraintTop_toTopOf="@id/ivDone"
+            tools:text="0/0" />
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/seed" />
+
+        <TextView
+            android:id="@+id/tvProgressPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/seed"
+            app:layout_constraintEnd_toStartOf="@id/ivArrow"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0%" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTasks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hsvProjects" />
+        app:layout_constraintTop_toBottomOf="@id/clProgress"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAdd"
@@ -55,6 +123,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvAddTask"
+        style="@style/boxText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_a_task"
@@ -80,6 +149,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvAddProject"
+        style="@style/boxText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_a_project"

@@ -3,7 +3,6 @@ package com.tristaam.todo.database
 import android.content.Context
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.tristaam.todo.database.project.ProjectDao
 import com.tristaam.todo.database.subtask.SubtaskDao

@@ -73,21 +73,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    val workVersion = "2.8.1"
-
-    // Kotlin + coroutines
-    implementation("androidx.work:work-runtime-ktx:$workVersion")
-
-    // optional - RxJava2 support
-    implementation("androidx.work:work-rxjava2:$workVersion")
-
-    // optional - GCMNetworkManager support
-    implementation("androidx.work:work-gcm:$workVersion")
-
-    // optional - Test helpers
-    androidTestImplementation("androidx.work:work-testing:$workVersion")
-
-    // optional - Multiprocess support
-    implementation("androidx.work:work-multiprocess:$workVersion")
 }

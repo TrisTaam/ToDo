@@ -144,12 +144,6 @@ class TaskDetailFragment : Fragment() {
                             remindBefore.getMinute()
                         )
                 }
-                cancelAlarm(it.id * 2, it.title, "Your task is due date")
-                cancelAlarm(
-                    it.id * 2 + 1,
-                    it.title,
-                    "Your task is ${tvReminder.text} due date"
-                )
             }
             initPriorityViewGroup()
         }
@@ -343,6 +337,12 @@ class TaskDetailFragment : Fragment() {
                         priority = viewModel.priority.value!!
                         projectId = viewModel.projectId
                         viewModel.updateTask(this)
+                        cancelAlarm(id * 2, title, "Your task is due date")
+                        cancelAlarm(
+                            id * 2 + 1,
+                            title,
+                            "Your task is ${tvReminder.text} due date"
+                        )
                         createAlarm(id * 2, title, "Your task is due date", dueDate)
                         createAlarm(
                             id * 2 + 1,

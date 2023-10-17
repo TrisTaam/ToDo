@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.tristaam.todo.model.Task
+import java.util.Date
 
 @Dao
 interface TaskDao {
@@ -51,4 +52,7 @@ interface TaskDao {
 
     @Query("SELECT COUNT(*) FROM task_table WHERE status = 1")
     fun getAllCompletedTasksCount(): LiveData<Int>
+
+    @Query("SELECT * FROM task_table WHERE dueDate BETWEEN :startDate AND :endDate")
+    fun getTasksByDate(startDate: Date, endDate: Date): LiveData<List<Task>>
 }

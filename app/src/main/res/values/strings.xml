@@ -44,4 +44,25 @@
     <string name="progress_percent">%d%%</string>
     <string name="completed_tasks">Completed tasks (%s)</string>
     <string name="reminder">%2d hours, %d minutes before</string>
+    <string name="select_sort_order">Select sort order</string>
+    <string name="due_date_old_new">Due date (old -> new)</string>
+    <string name="due_date_new_old">Due date (new -> old)</string>
+    <string name="created_old_new">Created (old -> new) - Manual</string>
+    <string name="created_new_old">Created (new -> old)</string>
+    <string name="priority_high_low">Priority (high -> low)</string>
+    <string name="alphabetical_a_z">Alphabetical (A -> Z)</string>
+    <string name="select_a_project">Select a project</string>
+    <string name="sort_by">Sort by</string>
+    <string name="avatar">Avatar</string>
+    <string name="account">Account</string>
+    <string name="language">Language</string>
+    <string name="add_widget">Add widget</string>
+    <string name="statistics">Statistics</string>
+    <string name="notification_settings">Notification settings</string>
+    <string name="rate_now">Rate now</string>
+    <string name="user_guide">User guide</string>
+    <string name="help_center">Help center</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="feedback_and_bug_report">Feedback and bug report</string>
+    <string name="themes">Themes</string>
 </resources>

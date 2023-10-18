@@ -63,7 +63,6 @@
         style="@style/option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/clUrgent">
 
         <ImageView
@@ -94,7 +93,6 @@
         style="@style/option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/clHigh">
 
         <ImageView
@@ -125,7 +123,6 @@
         style="@style/option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/clMedium">
 
         <ImageView

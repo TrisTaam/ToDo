@@ -36,6 +36,10 @@
         <item name="android:paddingVertical">16dp</item>
     </style>
 
+    <style name="optionTextStyle" parent="option">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="rippleStyle">
         <item name="android:background">?android:selectableItemBackground</item>
         <item name="android:clickable">true</item>

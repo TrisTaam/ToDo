@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="16dp"
+    tools:context=".ui.dialog.selectPriority.SelectPriorityDialogFragment">
+
+    <ImageView
+        android:id="@+id/ivDrawHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_draw_holder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSelectSortOrder"
+        style="@style/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_sort_order"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivDrawHolder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSortByDueDateOldNew"
+        style="@style/optionTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/due_date_old_new"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectSortOrder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSortByDueDateNewOld"
+        style="@style/optionTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/due_date_new_old"
+        app:layout_constraintTop_toBottomOf="@id/tvSortByDueDateOldNew" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSortByCreatedOldNew"
+        style="@style/optionTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/created_old_new"
+        app:layout_constraintTop_toBottomOf="@id/tvSortByDueDateNewOld" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSortByCreatedNewOld"
+        style="@style/optionTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/created_new_old"
+        app:layout_constraintTop_toBottomOf="@id/tvSortByCreatedOldNew" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSortByPriorityHighLow"
+        style="@style/optionTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/priority_high_low"
+        app:layout_constraintTop_toBottomOf="@id/tvSortByCreatedNewOld" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSortByAlphabeticalAZ"
+        style="@style/optionTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/alphabetical_a_z"
+        app:layout_constraintTop_toBottomOf="@id/tvSortByPriorityHighLow" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

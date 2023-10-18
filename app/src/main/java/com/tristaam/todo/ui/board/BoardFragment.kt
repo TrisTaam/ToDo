@@ -19,6 +19,7 @@ import com.tristaam.todo.model.Task
 import com.tristaam.todo.ui.completedTask.CompletedTaskFragment
 import com.tristaam.todo.ui.dialog.createProject.CreateProjectDialogFragment
 import com.tristaam.todo.ui.dialog.projectDetail.ProjectDetailDialogFragment
+import com.tristaam.todo.ui.dialog.sortTask.SortTaskDialogFragment
 import com.tristaam.todo.ui.taskdetail.TaskDetailFragment
 import com.tristaam.todo.utils.observeOnce
 
@@ -109,6 +110,7 @@ class BoardFragment : Fragment() {
             rvTasks.adapter = taskAdapter
             rvTasks.layoutManager = LinearLayoutManager(context)
             initChipGroup()
+            initToolBarActionButtons()
             viewModel.completedTasksCount.observe(viewLifecycleOwner) { completedTasksCount ->
                 tvProgress.text =
                     getString(R.string.progress, completedTasksCount, viewModel.tasksCount)
@@ -127,6 +129,32 @@ class BoardFragment : Fragment() {
             btnAddTask.setOnClickListener { onBtnAddTaskClick() }
             btnAddProject.setOnClickListener { onBtnAddProjectClick() }
             clProgress.setOnClickListener { onProgressClick() }
+        }
+    }
+
+    private fun initToolBarActionButtons() {
+        binding.apply {
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_sort -> {
+                        SortTaskDialogFragment().show(
+                            childFragmentManager,
+                            "SortTaskDialogFragment"
+                        )
+                        true
+                    }
+
+                    R.id.action_search -> {
+//                        SearchTaskDialogFragment().show(
+//                            childFragmentManager,
+//                            "SearchTaskDialogFragment"
+//                        )
+                        true
+                    }
+
+                    else -> false
+                }
+            }
         }
     }
 

@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -62,7 +63,7 @@ class BoardFragment : Fragment() {
             R.anim.fade_out_200
         )
     }
-    private val viewModel: BoardViewModel by viewModels {
+    private val viewModel: BoardViewModel by activityViewModels {
         BoardViewModel.BoardViewModelFactory(requireContext())
     }
     private val taskAdapter: TaskAdapter by lazy {
@@ -111,6 +112,7 @@ class BoardFragment : Fragment() {
             rvTasks.layoutManager = LinearLayoutManager(context)
             initChipGroup()
             initToolBarActionButtons()
+            initSearchBehavior()
             viewModel.completedTasksCount.observe(viewLifecycleOwner) { completedTasksCount ->
                 tvProgress.text =
                     getString(R.string.progress, completedTasksCount, viewModel.tasksCount)
@@ -132,28 +134,30 @@ class BoardFragment : Fragment() {
         }
     }
 
+    private fun initSearchBehavior() {
+        binding.apply {
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText == null) return false
+                    viewModel.setTaskFilter(newText, viewLifecycleOwner)
+                    return true
+                }
+            })
+        }
+    }
+
     private fun initToolBarActionButtons() {
         binding.apply {
-            toolbar.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_sort -> {
-                        SortTaskDialogFragment().show(
-                            childFragmentManager,
-                            "SortTaskDialogFragment"
-                        )
-                        true
-                    }
-
-                    R.id.action_search -> {
-//                        SearchTaskDialogFragment().show(
-//                            childFragmentManager,
-//                            "SearchTaskDialogFragment"
-//                        )
-                        true
-                    }
-
-                    else -> false
-                }
+            toolbar.menu.findItem(R.id.action_sort).setOnMenuItemClickListener {
+                SortTaskDialogFragment().show(
+                    childFragmentManager,
+                    "SortTaskDialogFragment"
+                )
+                true
             }
         }
     }

@@ -12,12 +12,12 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/toolbarTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_workspace"
-            app:title="Workspace">
+            app:title="Workspace"
+            app:titleTextAppearance="@style/toolbarTitle">
 
         </com.google.android.material.appbar.MaterialToolbar>
 

@@ -36,4 +36,9 @@
         android:name="com.tristaam.todo.ui.completedTask.CompletedTaskFragment"
         android:label="fragment_completed_task"
         tools:layout="@layout/fragment_completed_task" />
+    <fragment
+        android:id="@+id/searchTaskFragment"
+        android:name="com.tristaam.todo.ui.dialog.searchTask.SearchTaskFragment"
+        android:label="fragment_search_task"
+        tools:layout="@layout/fragment_search_task" />
 </navigation>

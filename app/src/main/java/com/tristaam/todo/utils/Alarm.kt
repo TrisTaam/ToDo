@@ -21,7 +21,9 @@ object Alarm {
         )
         val calendar = Calendar.getInstance()
         calendar.time = date
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        if (calendar.timeInMillis >= System.currentTimeMillis()) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        }
     }
 
     fun cancelAlarm(context: Context, bundle: Bundle, alarmId: Int) {

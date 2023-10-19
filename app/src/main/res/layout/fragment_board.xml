@@ -15,11 +15,22 @@
         app:titleTextAppearance="@style/toolbarTitle"
         tools:title="Board" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/round_corner"
+        app:iconifiedByDefault="false"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:queryHint="@string/search_your_tasks" />
+
     <HorizontalScrollView
         android:id="@+id/hsvProjects"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/searchView">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cgProjects"
